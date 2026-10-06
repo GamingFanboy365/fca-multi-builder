@@ -13,7 +13,7 @@ The original 2001–2003 Windows tools in this package (NES2FCA, fcasvedt, the P
 
 ## Getting the tools
 
-Ready-to-use zips (one each for Linux x86-64, Windows 32-bit and Windows 64-bit) are built by the GitHub Actions workflow on every push. They appear as artifacts of the "build" workflow run, and as a release for tags named `v*`. Each zip holds the four programs plus the emulator files and `nes2fca.cfg`, so `fcabuild` works straight out of the folder. The Windows programs are self-contained `.exe` files that need no extra DLLs. They only use functions Windows has had since XP, but they have only been tested on current Windows and under Wine.
+Ready-to-use zips are in the [`releases/`](releases/) folder: one each for Linux x86-64, Windows 32-bit and Windows 64-bit, with SHA-256 checksums in `SHA256SUMS`. Unzip the one for your system and run the tools from that folder. Each zip holds the four programs plus the emulator files and `nes2fca.cfg`, so `fcabuild` works straight away. The same zips are also built by the GitHub Actions workflow on every push (as artifacts of the "build" run) and published as a GitHub release for tags named `v*`; `make releases` refreshes the folder. The Windows programs are self-contained `.exe` files that need no extra DLLs. They only use functions Windows has had since XP, but they have only been tested on current Windows and under Wine.
 
 To build from source you need a C99 compiler and `make`. Cross-compiling for Windows needs MinGW-w64 (`apt install mingw-w64` on Debian/Ubuntu).
 
