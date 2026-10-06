@@ -1,0 +1,8 @@
+# Local-only files (never committed)
+/local/
+
+# Build output
+/build/
+/dist/
+*.o
+*.obj
