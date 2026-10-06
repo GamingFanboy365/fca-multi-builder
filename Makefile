@@ -6,6 +6,7 @@
 #   make test             run the test suite against the native build
 #   make emu-test         also boot the images in mGBA (needs libmgba-dev)
 #   make dist             release zips in dist/ (static binaries + emulator files)
+#   make releases         copy those zips into releases/ (committed) with SHA256SUMS
 
 TOOLS   := fcabuild fcasvedt fca-mkfs gbaraw
 VERSION := $(shell sed -n 's/.*FCA_TOOLS_VERSION "\(.*\)"/\1/p' src/common.h)
@@ -29,7 +30,7 @@ gbaraw_SRC   := common.c image.c gbaraw.c
 
 HEADERS := $(wildcard src/*.h)
 
-.PHONY: all native win32 win64 all-platforms test emu-test dist clean
+.PHONY: all native win32 win64 all-platforms test emu-test dist releases clean
 
 all: native
 
@@ -81,6 +82,11 @@ dist: all-platforms
 	    (cd dist && zip -qr fca-multi-builder-$(VERSION)-$$name.zip fca-multi-builder-$(VERSION)-$$name); \
 	    echo "dist/fca-multi-builder-$(VERSION)-$$name.zip"; \
 	done
+
+releases: dist
+	@rm -f releases/*.zip releases/SHA256SUMS && mkdir -p releases
+	cp dist/*.zip releases/
+	cd releases && sha256sum *.zip > SHA256SUMS
 
 # Fully static Linux binaries for the release zip.
 build/static/%: build/native/%
