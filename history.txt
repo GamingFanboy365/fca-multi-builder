@@ -1,0 +1,135 @@
+Revision history
+-=-=-=-=-=-=-=-=
+
+V9.8 - 2003-09-23 (FluBBa)
+Optimized VRAM writes.
+Fixed menu when used as PogoNES.
+Fixed dark line.
+
+V9.7 - 2003-09-21 (FluBBa)
+Fixed some things with the accumulator in the CPU core.
+Changed Y & X registers (hopefully a little bit faster).
+Moved PCM buffer and code to IWRAM (faster).
+Added check for GameBoyPlayer.
+Added Exit to normal PocketNES.
+
+V9.6 - 2003-05-25 (FluBBa)
+Fixed a smal background glitch on the first scanline (unscaled).
+
+v9.5 (FluBBa)
+Lowered the DPCM channel a bit to reduce the clipping of the other channels.
+Smal speedup in the CPU core again.
+
+v9.4 (FluBBa)
+Fixed a savestate problem with games with VRAM instead of VROM.
+
+v9.3 (FluBBa)
+Fixed a "little" problem with the savestates.
+
+v9.2 (FluBBa)
+Changed scanlines and irq to the way it was before.
+Major change to the CPU core (faster).
+
+v9.1 (FluBBa)
+Fixed flickering in some games, introduced in v9.
+
+v9 (FluBBa)
+Added CPU sleep when idle in VBlank (saves battery =).
+Added slomo with L+Start.
+Added PCM IRQ generation, fixes "Fire Hawk", "Last Starfighter" & "Silent Service".
+Added mapper 228 (Action52 intro is wrong).
+Added mapper 180 (Crazy Climber (J), no controller yet though).
+Added mapper 105 (Nintendo World Championship) remember to disable CPU hack (for "Rad Racer").
+Added mapper 93 (Fantazy Zone (J))
+Added mapper 72,73,75,76,78,86,87,92,94,232.
+Added mapper 70/152. Saint Seiya doesn't work correctly anyway, not the mappers fault.
+Added mapper 68 (Maharaja(J), Platoon(VS), no gfx in After Burner though).
+Added mapper 67 (Fantasy Zone 2 - The Teardrop of Opa-Opa (J)).
+Added mapper 34 (Deadly Towers & Impossible Mission 2).
+Added mapper 33 ("Don Doko Don 2" doesn't work, everything else should).
+Added mapper 22,24,26,32,65,80 & 97. All "Kaiketsu Yanchamaru" games are playable now.
+Added mappers 19,23 & 69.
+Added mapper 79 & 18.
+Added mapper 15(Contra 16 100-in-1).
+Fixed "Low G Man".
+Fixes to mappers 4,16,21 & 25.
+Fixed some of the savestate problems.
+Fixed graphic splits in scaled mode (many intro screens).
+Fixed PCM sample playing, takes a little more CPU now.
+Fixed multiplay, also supports up to 4 players now.
+Fixed background flicker.
+Fixed Sprite 0 hit a bit,
+   Captain Skyhawk, Snow Bros & Saint Seiya starts now,
+   probably break other games.
+Fixed sprites to background priority.
+Fixed sprites animation with CHR switching a bit (SMB3).
+Fixed scaled sprites a bit.
+Fixed invisible sprites (Ninja gaiden 2, TMNT 2).
+Fixes to multiboot,sram and Pogoshell (Herg).
+Fixed VS-palette for Platoon, Hoogans Alley, Pinball,
+   Clu Clu Land, Machrider, Dr Mario, Super Sky Kid
+   Battle City, Star Luster, Freedom Force & Slalom.
+Changed GBA hardware PWM frequency for (hopefully) better sound.
+Changed "Restart" in PogoNES to restart and added "Exit" to exit to the shell.
+
+
+
+v8
+PCM sound channel added
+Left/Right in rom menu skips 10 at a time
+Quicksave,quickload (R+SELECT,R+START)
+Accelerated mode (L+START)
+More than 15 savestates are allowed
+Automatic SRAM handling
+Various bugfixes and cosmetic changes
+
+v7a
+2 player link play
+ROM compilation method changed
+
+v7
+Multiple save states
+Better detection of bad roms
+Optional splash screen
+1P/2P Controller switchable
+Sleep option
+Brighter NES palette
+Improved sound
+More mappers (9,11,66,71,21,25)
+
+v6
+State saving
+Autofire buttons
+Unscaled display (back by popular demand)
+VS Unisystem (mappers 99,151)
+More display improvements
+
+v5
+Mappers 1,2,3,4
+Display shifted left 8 pixels (now centered horizontally)
+Scaled display (autoscroll options removed)
+SRAM saving
+Multiboot detect (separate MBV2 version not needed anymore)
+Fixed menu input (for Flash Advance multiboot)
+
+v4
+Menu system
+Many display improvements
+Speed hacks
+Autoscroll options
+
+v3
+Sound (square channels)
+Some PPU fixes
+Scroll screen with L/R buttons
+
+v2
+Multiboot
+Mapper 1 games (with no CHR)
+Mapper 2
+Scrolling (sorta)
+Minor 6502 bugfixes
+Moved nes rom to the end of the file
+
+v1
+Initial release
