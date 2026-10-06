@@ -64,10 +64,10 @@ emu-test: native build/gbarun
 
 # Files the tools need at run time (emulators, nes2fca.cfg) and the docs,
 # copied next to the binaries so each zip works out of the box.
-DATA := nes2fca.cfg fca.gba shell.bin emu.bin emuslow.bin font.dat \
+DATA := $(addprefix original/,nes2fca.cfg fca.gba shell.bin emu.bin emuslow.bin font.dat \
         mapper0.bin mapper1.bin mapper2.bin mapper3.bin mapper4.bin \
         pocketnes.gba pceadvance.gba gbongba-0.4.gba Easymb2gba.gba \
-        splash9.raw splashlogo.raw gameboyplayer.raw
+        splash9.raw splashlogo.raw gameboyplayer.raw)
 DOCS := README.md docs/FORMATS.md
 
 dist: all-platforms

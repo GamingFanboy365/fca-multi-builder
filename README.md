@@ -27,7 +27,7 @@ make dist            # release zips in dist/
 
 ## Building a compilation with fcabuild
 
-`fcabuild` takes ROM files and writes a `.gba` image. It picks the emulator from the file extensions (`.nes` for PocketNES, `.pce` for PCEAdvance, `.gb`/`.gbc` for GBonGBA), or you can choose one with `-t`. It looks for the emulator files next to the program, then in the current directory; `-d DIR` points it elsewhere.
+`fcabuild` takes ROM files and writes a `.gba` image. It picks the emulator from the file extensions (`.nes` for PocketNES, `.pce` for PCEAdvance, `.gb`/`.gbc` for GBonGBA), or you can choose one with `-t`. It looks for the emulator files next to the program, then in the current directory, checking an `original` folder in each, so it finds them both in a release zip and in this repository. `-d DIR` points it elsewhere.
 
 ```sh
 fcabuild *.nes -o nes-games.gba
@@ -96,9 +96,9 @@ FamicomAdvance has seven 8 KB slots and finds a game's save by its title, so a s
 
 The exact image and save layouts are documented in [docs/FORMATS.md](docs/FORMATS.md).
 
-## The original files
+## The original files (`original/`)
 
-The files from the original `PCE48FC98GBA.zip` package are kept unchanged in the top folder (the zip itself is in `zip/`). The emulator files `fcabuild` uses at run time are `pocketnes.gba`, `pceadvance.gba`, `fca.gba`, `shell.bin` with its system files (`emu.bin`, `emuslow.bin`, `font.dat`, `mapper*.bin`), `gbongba-0.4.gba` and `Easymb2gba.gba`. `SMS.GBA` (DrSMS 3.00 beta 2) came with the package but none of the original tools supported it. The Windows programs `NES2FCA.exe`, `fcasvedt.exe` and `PCEAdvance_ROM_BUILDER.EXE` remain for reference. `splash9.raw`, `splashlogo.raw` and `gameboyplayer.raw` are ready-made splash screens.
+The files from the original `PCE48FC98GBA.zip` package are kept unchanged in `original/` (the zip itself is in `zip/`). The emulator files `fcabuild` uses at run time are `pocketnes.gba`, `pceadvance.gba`, `fca.gba`, `shell.bin` with its system files (`emu.bin`, `emuslow.bin`, `font.dat`, `mapper*.bin`), `gbongba-0.4.gba` and `Easymb2gba.gba`. `SMS.GBA` (DrSMS 3.00 beta 2) came with the package but none of the original tools supported it. The Windows programs `NES2FCA.exe`, `fcasvedt.exe` and `PCEAdvance_ROM_BUILDER.EXE` remain for reference. `splash9.raw`, `splashlogo.raw` and `gameboyplayer.raw` are ready-made splash screens.
 
 ## Credits
 

@@ -13,6 +13,7 @@ import sys
 import tempfile
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+DATA = os.path.join(ROOT, 'original')  # the files from the old package
 
 # Screen colours of the test programs as mGBA shows them.
 NES_RED, NES_GREEN, NES_BLUE, NES_GREY = 'EF5A00', '84EF7B', '526BF7', 'A5A5A5'
@@ -28,14 +29,14 @@ def main():
     work = tempfile.mkdtemp(prefix='fca-emu-')
     os.chdir(work)
     subprocess.run([sys.executable, os.path.join(ROOT, 'tests', 'make-test-roms.py'), 'roms',
-                    os.path.join(ROOT, 'gbongba-0.4.gba')], check=True)
+                    os.path.join(DATA, 'gbongba-0.4.gba')], check=True)
 
     def tool(name, *args):
         subprocess.run([os.path.join(bindir, name), *args], check=True,
                        stdout=subprocess.DEVNULL)
 
     def build(out, *args):
-        tool('fcabuild', '-q', '-d', ROOT, '--no-ini', '--pad-to', '512k', *args, '-o', out)
+        tool('fcabuild', '-q', '-d', DATA, '--no-ini', '--pad-to', '512k', *args, '-o', out)
 
     def screen(img, frames, *keys, env=None, flat=38400):
         r = subprocess.run([gbarun, img, str(frames), *keys], check=True, stdout=subprocess.PIPE,
@@ -58,7 +59,7 @@ def main():
     for n, want in enumerate((NES_RED, NES_GREEN, NES_BLUE)):
         expect('game %d from the menu' % (n + 1), screen('pnes.gba', 400, *pick[n].split()), want)
     build('pnes-splash.gba', R('Red Test (U) [!].nes'), R('Blue Plain.nes'),
-          '-s', os.path.join(ROOT, 'splash9.raw'))
+          '-s', os.path.join(DATA, 'splash9.raw'))
     expect('splash screen first', screen('pnes-splash.gba', 30, flat=20000), '000000')
     expect('game 2 after the splash', screen('pnes-splash.gba', 600, '250:D', '310:A'), NES_BLUE)
 

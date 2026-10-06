@@ -17,6 +17,7 @@ import sys
 import tempfile
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+DATA = os.path.join(ROOT, 'original')  # the files from the old package
 FAILED = []
 PASSED = 0
 
@@ -105,18 +106,18 @@ def main():
     os.chdir(work)
     print('Working in', work)
     subprocess.run([sys.executable, os.path.join(ROOT, 'tests', 'make-test-roms.py'), 'roms',
-                    os.path.join(ROOT, 'gbongba-0.4.gba')], check=True)
+                    os.path.join(DATA, 'gbongba-0.4.gba')], check=True)
     R = lambda n: os.path.join('roms', n)
-    D = ['-d', ROOT, '--no-ini', '-q']
-    pnes_len = len(read(os.path.join(ROOT, 'pocketnes.gba')))
-    pcea_len = len(read(os.path.join(ROOT, 'pceadvance.gba')))
-    fca_len = len(read(os.path.join(ROOT, 'fca.gba')))
+    D = ['-d', DATA, '--no-ini', '-q']
+    pnes_len = len(read(os.path.join(DATA, 'pocketnes.gba')))
+    pcea_len = len(read(os.path.join(DATA, 'pceadvance.gba')))
+    fca_len = len(read(os.path.join(DATA, 'fca.gba')))
 
     print('PocketNES image')
     t.run('fcabuild', *D, R('Red Test (U) [!].nes'), R('Green Test (E).nes'),
           R('Blue Trainer.nes'), '--clean-titles', '-o', 'pnes.gba')
     img = read('pnes.gba')
-    check(img[:pnes_len] == read(os.path.join(ROOT, 'pocketnes.gba')), 'emulator copied unchanged')
+    check(img[:pnes_len] == read(os.path.join(DATA, 'pocketnes.gba')), 'emulator copied unchanged')
     ents, end = entries_pnes(img, pnes_len)
     check([e[0] for e in ents] == ['Red Test', 'Green Test', 'Blue Trainer'], 'titles cleaned: %r' % [e[0] for e in ents])
     check(ents[0][2] == 0 and ents[1][2] == 4, 'PAL flag only for the (E) game')
@@ -138,7 +139,7 @@ def main():
         f.write('C:\\old\\windows\\path\\Blue Plain.nes\n')
     with open('NES2FCA.ini', 'w', encoding='utf-8') as f:
         f.write('[PocketNES]\nBlue Plain.nes=32|5|0|From Ini\n')
-    t.run('fcabuild', '-d', ROOT, '-q', '-l', R('games.lst'), '--ini', 'NES2FCA.ini', '-o', 'list.gba')
+    t.run('fcabuild', '-d', DATA, '-q', '-l', R('games.lst'), '--ini', 'NES2FCA.ini', '-o', 'list.gba')
     ents, _ = entries_pnes(read('list.gba'), pnes_len)
     check([(e[0], e[2], e[3]) for e in ents] == [('Custom Title', 3, 7), ('From Ini', 32, 5)],
           'list file fields and ini settings: %r' % [(e[0], e[2], e[3]) for e in ents])
@@ -173,14 +174,14 @@ def main():
     print('GBonGBA image')
     t.run('fcabuild', *D, R('GB Black.gb'), R('GB White.gb'), '-o', 'gb.gba')
     img = read('gb.gba')
-    gb_len = len(read(os.path.join(ROOT, 'gbongba-0.4.gba')))
+    gb_len = len(read(os.path.join(DATA, 'gbongba-0.4.gba')))
     check(img[gb_len:gb_len + 65536] == read(R('GB Black.gb')) + read(R('GB White.gb')), 'GB ROMs appended')
     check(gba_header_ok(img) and img[4:8] == bytes([0x24, 0xFF, 0xAE, 0x51]), 'invalid header fixed automatically')
 
     print('FamicomAdvance images')
     t.run('fcabuild', *D, '-t', 'fca', '--no-fix-header', R('Red Test (U) [!].nes'),
           R('Blue Plain.nes'), R('green.sav'), '-o', 'fca.gba')
-    t.run('fca-mkfs', '-b', os.path.join(ROOT, 'fca.gba'), 'mkfs.gba',
+    t.run('fca-mkfs', '-b', os.path.join(DATA, 'fca.gba'), 'mkfs.gba',
           R('Red Test (U) [!].nes'), R('Blue Plain.nes'), R('green.sav'))
     check(read('fca.gba') == read('mkfs.gba'), 'fcabuild -t fca matches fca-mkfs')
     ents, end = entries_fca(read('fca.gba'), fca_len)
@@ -194,7 +195,7 @@ def main():
     check(ents[0][0] == 'ドラゴンクエスト ガンダム'.encode('euc_jp'), 'UTF-8 title to EUC-JP: %r' % ents[0][0])
     check(gba_header_ok(img) and img[0xAC:0xB2] == b'FCA\0KK', 'NES2FCA header defaults')
     t.run('fcabuild', *D, '-t', 'fca-v01', R('Red Test (U) [!].nes'), '-o', 'v01.gba')
-    ents, _ = entries_fca(read('v01.gba'), len(read(os.path.join(ROOT, 'shell.bin'))))
+    ents, _ = entries_fca(read('v01.gba'), len(read(os.path.join(DATA, 'shell.bin'))))
     check([e[0] for e in ents][:3] == [b'emu', b'emuslow', b'font'] and ents[-1][0] == b'Red Test (U) [!]',
           'fca-v01 system files')
 
@@ -209,7 +210,7 @@ def main():
     check(len(read('pad.gba')) == 524288 and read('pad.gba').endswith(b'\xff' * 16), '--pad-to')
 
     print('Splash screens')
-    splash = os.path.join(ROOT, 'splash9.raw')
+    splash = os.path.join(DATA, 'splash9.raw')
     t.run('gbaraw', splash, 'splash.bmp')
     t.run('gbaraw', 'splash.bmp', 'splash.raw')
     a, b = read(splash), read('splash.raw')

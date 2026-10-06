@@ -138,7 +138,8 @@ static void usage(FILE *f)
 "                        file extensions.\n"
 "  --list-targets        show the targets and the emulator files they use\n"
 "  -d, --data-dir DIR    where the emulators and nes2fca.cfg live\n"
-"                        (default: next to fcabuild, then the current dir)\n"
+"                        (default: next to fcabuild, then the current dir,\n"
+"                        or an \"original\" folder in either)\n"
 "  --config FILE         use this nes2fca.cfg\n"
 "\n"
 "ROMs and per-game settings:\n"
@@ -998,17 +999,28 @@ int main(int argc, char **argv)
     if (opt.data_dir) {
         data_dir = xstrdup(opt.data_dir);
     } else {
-        data_dir = exe_dir(argv[0]);
-        if (!(cfg_path = find_file_ci(data_dir, "nes2fca.cfg"))) {
-            char *shell = find_file_ci(data_dir, "pocketnes.gba");
-            if (!shell) {
-                free(data_dir);
-                data_dir = xstrdup(".");
-            }
-            free(shell);
+        /* Next to the program, then here; in both places also look in an
+         * "original" folder (where this repository keeps the old package). */
+        char *exe = exe_dir(argv[0]);
+        char *cands[4];
+        int c;
+        cands[0] = exe;
+        cands[1] = path_join(exe, "original");
+        cands[2] = xstrdup(".");
+        cands[3] = xstrdup("original");
+        data_dir = NULL;
+        for (c = 0; c < 4; c++) {
+            char *p = find_file_ci(cands[c], "nes2fca.cfg");
+            if (!p)
+                p = find_file_ci(cands[c], "pocketnes.gba");
+            if (p && !data_dir)
+                data_dir = xstrdup(cands[c]);
+            free(p);
         }
-        free(cfg_path);
-        cfg_path = NULL;
+        if (!data_dir)
+            data_dir = xstrdup(".");
+        for (c = 0; c < 4; c++)
+            free(cands[c]);
     }
     if (opt.config) {
         if (ini_load(&cfg, opt.config) != 0)
